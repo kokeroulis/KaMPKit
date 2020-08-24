@@ -7,7 +7,9 @@ import co.touchlab.kampkit.ktor.KtorApi
 import co.touchlab.kermit.Kermit
 import co.touchlab.stately.ensureNeverFrozen
 import com.russhwolf.settings.Settings
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
@@ -42,6 +44,19 @@ class BreedModel() : KoinComponent {
             val oneHourMS = 60 * 60 * 1000
             return (lastDownloadTimeMS + oneHourMS < currentTimeMS)
         }
+
+        withContext(Dispatchers.Default) {
+            println("It will reach here")
+        }
+
+        println("I am here")
+
+        withContext(Dispatchers.Default) {
+            log.e { "Never get's executed" }
+            log.e { "Never called" }
+        }
+
+        println("the code is never going to reach here")
 
         val currentTimeMS = currentTimeMillis()
         if (isBreedListStale(currentTimeMS)) {
